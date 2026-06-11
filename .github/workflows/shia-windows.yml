@@ -94,9 +94,8 @@ jobs:
           targets: ${{ matrix.job.target }}
           components: "rustfmt"
 
-      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
-        with:
-          prefix-key: windows-2022
+      # NOTE: rust-cache intentionally removed — it doesn't invalidate on the
+      # sed-based source branding, which caused a stale (RustDesk-named) compile.
 
       - name: Setup vcpkg with Github Actions binary cache
         uses: lukka/run-vcpkg@b1a0dd252f06b9e25b3c022a9a03bd7a427fb6a2 # v11
