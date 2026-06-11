@@ -44,13 +44,13 @@ jobs:
           # server + key
           sed -i 's|rs-ny.rustdesk.com|188.245.173.248|g' "$CFG"
           sed -i 's|OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=|kC9HClDkLNY8xdTjFr8oLokCw3m6J5h+tsLKRmxJrXY=|g' "$CFG"
-          # app name (paths/identifiers/window title) -> ShiaMigon
-          sed -i 's|RwLock::new("RustDesk".to_owned())|RwLock::new("ShiaMigon".to_owned())|' "$CFG"
+          # app name (paths/identifiers/window title) -> cmigun
+          sed -i 's|RwLock::new("RustDesk".to_owned())|RwLock::new("cmigun".to_owned())|' "$CFG"
           # Windows file properties (Product/Company/Description)
           RC=flutter/windows/runner/Runner.rc
-          sed -i 's|Purslane Ltd|Shia Migon|g' "$RC"
-          sed -i 's|RustDesk Remote Desktop|Shia Migon Remote Support|g' "$RC"
-          sed -i 's|"ProductName", "RustDesk"|"ProductName", "Shia Migon"|g' "$RC"
+          sed -i 's|Purslane Ltd|cmigun|g' "$RC"
+          sed -i 's|RustDesk Remote Desktop|cmigun Remote Support|g' "$RC"
+          sed -i 's|"ProductName", "RustDesk"|"ProductName", "cmigun"|g' "$RC"
           echo "=== branded constants ==="
           grep -nE "RENDEZVOUS_SERVERS|RS_PUB_KEY|APP_NAME" "$CFG" | head
           grep -nE "ProductName|CompanyName|FileDescription" "$RC" | head
