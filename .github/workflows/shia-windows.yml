@@ -55,6 +55,32 @@ jobs:
           grep -nE "RENDEZVOUS_SERVERS|RS_PUB_KEY|APP_NAME" "$CFG" | head
           grep -nE "ProductName|CompanyName|FileDescription" "$RC" | head
 
+      - name: Inject minimalist incoming-only mode + app name (runtime)
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          f = "src/common.rs"
+          s = open(f, encoding="utf-8").read()
+          needle = "pub fn load_custom_client() {"
+          assert needle in s, "load_custom_client not found!"
+          inject = needle + "\n" + "\n".join([
+              '    *config::APP_NAME.write().unwrap() = "cmigun".to_owned();',
+              '    {',
+              '        let mut h = config::HARD_SETTINGS.write().unwrap();',
+              '        h.insert("conn-type".to_owned(), "incoming".to_owned());',
+              '        h.insert("disable-settings".to_owned(), "Y".to_owned());',
+              '        h.insert("disable-installation".to_owned(), "Y".to_owned());',
+              '        h.insert("disable-account".to_owned(), "Y".to_owned());',
+              '        h.insert("disable-ab".to_owned(), "Y".to_owned());',
+              '    }',
+          ])
+          s = s.replace(needle, inject, 1)
+          open(f, "w", encoding="utf-8").write(s)
+          print("injected: cmigun + incoming-only + disabled settings/install/account/ab")
+          PY
+          echo "=== verify injection ==="
+          grep -n -A12 "pub fn load_custom_client() {" src/common.rs | head -14
+
       - name: Restore bridge files
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
